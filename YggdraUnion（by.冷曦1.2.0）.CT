@@ -1,0 +1,1638 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="46">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>67</ID>
+      <Description>"无限进攻（攻击前开启，失效时需重启游戏）"</Description>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+//code from here to '[DISABLE]' will be used to enable the cheat
+aobscanmodule(pAttack_aob,YggdraUnion.exe,48 ** ** ** ** ** ** 38 1C 01) // should be unique
+alloc(newmem,$100,pAttack_aob)
+
+label(pAttackcode)
+label(return)
+registersymbol(pAttackcode)
+
+newmem:
+  reassemble(pAttack_aob)
+  mov byte ptr [rcx+rax],1
+  jmp return
+
+pAttackcode:
+  reassemble(pAttack_aob)
+
+pAttack_aob:
+  jmp newmem
+  nop 2
+return:
+registersymbol(pAttack_aob)
+
+[DISABLE]
+//code from here till the end of the code will be used to disable the cheat
+pAttack_aob:
+  reassemble(pAttackcode)
+
+unregistersymbol(*)
+dealloc(*)
+
+{
+// ORIGINAL CODE - INJECTION POINT: YggdraUnion.exe+8CCB0
+
+YggdraUnion.exe+8CC7B: 3C 07                    - cmp al,07
+YggdraUnion.exe+8CC7D: 0F 84 E6 00 00 00        - je YggdraUnion.exe+8CD69
+YggdraUnion.exe+8CC83: 41 38 9B 16 01 00 00     - cmp [r11+00000116],bl
+YggdraUnion.exe+8CC8A: 0F 85 D9 00 00 00        - jne YggdraUnion.exe+8CD69
+YggdraUnion.exe+8CC90: 48 89 6C 24 48           - mov [rsp+48],rbp
+YggdraUnion.exe+8CC95: 48 89 74 24 50           - mov [rsp+50],rsi
+YggdraUnion.exe+8CC9A: 84 C0                    - test al,al
+YggdraUnion.exe+8CC9C: 0F 85 91 00 00 00        - jne YggdraUnion.exe+8CD33
+YggdraUnion.exe+8CCA2: 0F B6 05 75 42 29 00     - movzx eax,byte ptr [YggdraUnion.exe+320F1E]
+YggdraUnion.exe+8CCA9: 48 69 C8 88 04 00 00     - imul rcx,rax,00000488
+// ---------- INJECTING HERE ----------
+YggdraUnion.exe+8CCB0: 48 8D 05 4E 6E 29 00     - lea rax,[YggdraUnion.exe+323B05]
+// ---------- DONE INJECTING  ----------
+YggdraUnion.exe+8CCB7: 38 1C 01                 - cmp [rcx+rax],bl
+YggdraUnion.exe+8CCBA: 7C 77                    - jl YggdraUnion.exe+8CD33
+YggdraUnion.exe+8CCBC: 41 0F B6 73 06           - movzx esi,byte ptr [r11+06]
+YggdraUnion.exe+8CCC1: 48 8D 7C 24 20           - lea rdi,[rsp+20]
+YggdraUnion.exe+8CCC6: 41 0F B6 6B 05           - movzx ebp,byte ptr [r11+05]
+YggdraUnion.exe+8CCCB: C7 44 24 20 FF 00 00 FF  - mov [rsp+20],FF0000FF
+YggdraUnion.exe+8CCD3: C7 44 24 24 00 01 01 00  - mov [rsp+24],00010100
+YggdraUnion.exe+8CCDB: 0F 1F 44 00 00           - nop dword ptr [rax+rax+00]
+YggdraUnion.exe+8CCE0: 0F B6 17                 - movzx edx,byte ptr [rdi]
+YggdraUnion.exe+8CCE3: 33 C9                    - xor ecx,ecx
+}
+</AssemblerScript>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>2</ID>
+      <Description>"当前回合数"</Description>
+      <ShowAsSigned>0</ShowAsSigned>
+      <VariableType>2 Bytes</VariableType>
+      <Address>YggdraUnion.exe+354CC4</Address>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>70</ID>
+      <Description>"无限移动力（不影响敌方）"</Description>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript Async="1">[ENABLE]
+//code from here to '[DISABLE]' will be used to enable the cheat
+aobscanmodule(pMovementCount_aob,YggdraUnion.exe,0F ** ** ** ** ** ** 88 ** ** ** ** ** 3C 05) // should be unique
+alloc(newmem,$100,pMovementCount_aob)
+
+label(pMovementCountcode)
+label(return)
+registersymbol(pMovementCountcode)
+
+newmem:
+  mov ecx,#99
+  jmp return
+
+pMovementCountcode:
+  readmem(pMovementCount_aob,7)
+
+pMovementCount_aob:
+  jmp newmem
+  nop 2
+return:
+registersymbol(pMovementCount_aob)
+
+[DISABLE]
+//code from here till the end of the code will be used to disable the cheat
+pMovementCount_aob:
+  readmem(pMovementCountcode,7)
+
+unregistersymbol(*)
+dealloc(*)
+
+{
+// ORIGINAL CODE - INJECTION POINT: YggdraUnion.exe+8DDEA
+
+YggdraUnion.exe+8DDC4: 3C 01                 - cmp al,01
+YggdraUnion.exe+8DDC6: 76 0D                 - jna YggdraUnion.exe+8DDD5
+YggdraUnion.exe+8DDC8: 0F B7 41 02           - movzx eax,word ptr [rcx+02]
+YggdraUnion.exe+8DDCC: 48 6B C8 38           - imul rcx,rax,38
+YggdraUnion.exe+8DDD0: 49 03 CE              - add rcx,r14
+YggdraUnion.exe+8DDD3: EB 03                 - jmp YggdraUnion.exe+8DDD8
+YggdraUnion.exe+8DDD5: 48 8B CF              - mov rcx,rdi
+YggdraUnion.exe+8DDD8: E8 53 C4 FC FF        - call YggdraUnion.exe+5A230
+YggdraUnion.exe+8DDDD: 48 8B 15 54 44 25 00  - mov rdx,[YggdraUnion.exe+2E2238]
+YggdraUnion.exe+8DDE4: 88 05 E5 C2 2A 00     - mov [YggdraUnion.exe+33A0CF],al
+// ---------- INJECTING HERE ----------
+YggdraUnion.exe+8DDEA: 0F B6 8A 66 01 00 00  - movzx ecx,byte ptr [rdx+00000166]
+// ---------- DONE INJECTING  ----------
+YggdraUnion.exe+8DDF1: 88 0D D7 C2 2A 00     - mov [YggdraUnion.exe+33A0CE],cl
+YggdraUnion.exe+8DDF7: 3C 05                 - cmp al,05
+YggdraUnion.exe+8DDF9: 75 13                 - jne YggdraUnion.exe+8DE0E
+YggdraUnion.exe+8DDFB: 80 BA 62 01 00 00 02  - cmp byte ptr [rdx+00000162],02
+YggdraUnion.exe+8DE02: 0F B6 C0              - movzx eax,al
+YggdraUnion.exe+8DE05: 0F 45 C7              - cmovne eax,edi
+YggdraUnion.exe+8DE08: 88 05 C1 C2 2A 00     - mov [YggdraUnion.exe+33A0CF],al
+YggdraUnion.exe+8DE0E: 4C 8D 2D 9B C2 2A 00  - lea r13,[YggdraUnion.exe+33A0B0]
+YggdraUnion.exe+8DE15: 49 8B CD              - mov rcx,r13
+YggdraUnion.exe+8DE18: E8 A3 26 00 00        - call YggdraUnion.exe+904C0
+}
+</AssemblerScript>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>169</ID>
+      <Description>"当前士气（0~9999）"</Description>
+      <Options moHideChildren="1" moManualExpandCollapse="1" moDeactivateChildrenAsWell="1"/>
+      <GroupHeader>1</GroupHeader>
+      <Address/>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>170</ID>
+          <Description>"米蘭諾士氣"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>YggdraUnion.exe+351ED2</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>421</ID>
+          <Description>"優葛朵菈士氣"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>YggdraUnion.exe+351F0A</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>171</ID>
+          <Description>"杜蘭士氣"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>YggdraUnion.exe+351F42</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>172</ID>
+          <Description>"妮婕士氣"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>YggdraUnion.exe+351F7A</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>173</ID>
+          <Description>"羅斯威爾士氣"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>YggdraUnion.exe+351FB2</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>422</ID>
+          <Description>"蘿莎莉士氣"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>YggdraUnion.exe+351FEA</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>175</ID>
+          <Description>"拉傑爾士氣"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>YggdraUnion.exe+352022</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>176</ID>
+          <Description>"克魯斯士氣"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>YggdraUnion.exe+35205A</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>177</ID>
+          <Description>"艾蓮娜士氣"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>YggdraUnion.exe+352092</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>178</ID>
+          <Description>"奇莉葉士氣"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>YggdraUnion.exe+3520CA</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>179</ID>
+          <Description>"戈登士氣"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>YggdraUnion.exe+352102</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>180</ID>
+          <Description>"柯本士氣"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>YggdraUnion.exe+35213A</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>181</ID>
+          <Description>"蜜斯托爾士氣"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>YggdraUnion.exe+352172</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>182</ID>
+          <Description>"帕梅菈士氣"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>YggdraUnion.exe+3521AA</Address>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>174</ID>
+      <Description>"经验倍率"</Description>
+      <Options moHideChildren="1"/>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+//code from here to '[DISABLE]' will be used to enable the cheat
+aobscanmodule(pExp_aob,YggdraUnion.exe,0F ** ** ** ** 66 89 47 02 80) // should be unique
+alloc(newmem,$100,pExp_aob)
+
+label(pExpcode)
+label(return)
+label(pExp)
+registersymbol(pExpcode)
+registersymbol(pExp)
+
+newmem:
+  reassemble(pExp_aob)
+  imul eax,[pExp]
+  jmp return
+
+pExp:
+  dd 1
+
+pExpcode:
+  reassemble(pExp_aob)
+
+pExp_aob:
+  jmp newmem
+return:
+registersymbol(pExp_aob)
+
+[DISABLE]
+//code from here till the end of the code will be used to disable the cheat
+pExp_aob:
+  reassemble(pExpcode)
+
+unregistersymbol(*)
+dealloc(*)
+
+{
+// ORIGINAL CODE - INJECTION POINT: YggdraUnion.exe+354C0
+
+YggdraUnion.exe+3549F: EB 03                    - jmp YggdraUnion.exe+354A4
+YggdraUnion.exe+354A1: 49 8B CE                 - mov rcx,r14
+YggdraUnion.exe+354A4: 48 89 4F 14              - mov [rdi+14],rcx
+YggdraUnion.exe+354A8: 0F B6 47 FD              - movzx eax,byte ptr [rdi-03]
+YggdraUnion.exe+354AC: 80 79 0A 07              - cmp byte ptr [rcx+0A],07
+YggdraUnion.exe+354B0: 41 0F 44 C6              - cmove eax,r14d
+YggdraUnion.exe+354B4: 88 47 FD                 - mov [rdi-03],al
+YggdraUnion.exe+354B7: E8 24 55 02 00           - call YggdraUnion.exe+5A9E0
+YggdraUnion.exe+354BC: 84 C0                    - test al,al
+YggdraUnion.exe+354BE: 74 09                    - je YggdraUnion.exe+354C9
+// ---------- INJECTING HERE ----------
+YggdraUnion.exe+354C0: 0F B7 44 73 56           - movzx eax,word ptr [rbx+rsi*2+56]
+// ---------- DONE INJECTING  ----------
+YggdraUnion.exe+354C5: 66 89 47 02              - mov [rdi+02],ax
+YggdraUnion.exe+354C9: 80 7C 1E 51 00           - cmp byte ptr [rsi+rbx+51],00
+YggdraUnion.exe+354CE: 7C 13                    - jl YggdraUnion.exe+354E3
+YggdraUnion.exe+354D0: 80 7B 02 15              - cmp byte ptr [rbx+02],15
+YggdraUnion.exe+354D4: 75 0D                    - jne YggdraUnion.exe+354E3
+YggdraUnion.exe+354D6: 41 0F B6 47 44           - movzx eax,byte ptr [r15+44]
+YggdraUnion.exe+354DB: 0F BA E8 05              - bts eax,05
+YggdraUnion.exe+354DF: 41 88 47 44              - mov [r15+44],al
+YggdraUnion.exe+354E3: 48 83 C7 70              - add rdi,70
+YggdraUnion.exe+354E7: 44 0F B6 05 91 2B 30 00  - movzx r8d,byte ptr [YggdraUnion.exe+338080]
+}
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>168</ID>
+          <Description>"set value"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>4 Bytes</VariableType>
+          <Address>pExp</Address>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>211</ID>
+      <Description>"卡片POW（修改此条数值可以一括修改全部卡片）"</Description>
+      <Options moHideChildren="1" moRecursiveSetValue="1" moManualExpandCollapse="1" moDeactivateChildrenAsWell="1"/>
+      <GroupHeader>1</GroupHeader>
+      <Address/>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>0</ID>
+          <Description>"01傀儡製造"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>YggdraUnion.exe+351E76</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>212</ID>
+          <Description>"02冥府之門"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>YggdraUnion.exe+351E78</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>213</ID>
+          <Description>"03蛇妖之眼"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>YggdraUnion.exe+351E7a</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>214</ID>
+          <Description>"04毒之吐息"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>YggdraUnion.exe+351E7c</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>215</ID>
+          <Description>"05混沌重力"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>YggdraUnion.exe+351E7e</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>216</ID>
+          <Description>"06武裝破除"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>YggdraUnion.exe+351E80</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>217</ID>
+          <Description>"07疾盜之影"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>YggdraUnion.exe+351E82</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>218</ID>
+          <Description>"08血之利爪"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>YggdraUnion.exe+351E84</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>219</ID>
+          <Description>"09鋼鐵戰車"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>YggdraUnion.exe+351E86</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>220</ID>
+          <Description>"10神盾屏障"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>YggdraUnion.exe+351E88</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>221</ID>
+          <Description>"11地獄業火"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>YggdraUnion.exe+351E8a</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>222</ID>
+          <Description>"12寒冰風暴"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>YggdraUnion.exe+351E8c</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>223</ID>
+          <Description>"13電光之箭"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>YggdraUnion.exe+351E8e</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>224</ID>
+          <Description>"14破邪之光"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>YggdraUnion.exe+351E90</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>225</ID>
+          <Description>"15龍之終結"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>YggdraUnion.exe+351E92</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>226</ID>
+          <Description>"16大地崩裂"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>YggdraUnion.exe+351E94</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>227</ID>
+          <Description>"17心之逆轉"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>YggdraUnion.exe+351E96</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>228</ID>
+          <Description>"18革命之戰"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>YggdraUnion.exe+351E98</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>229</ID>
+          <Description>"19最終之戰"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>YggdraUnion.exe+351E9a</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>230</ID>
+          <Description>"20死者復甦"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>YggdraUnion.exe+351E9c</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>231</ID>
+          <Description>"21淨化之光"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>YggdraUnion.exe+351E9e</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>232</ID>
+          <Description>"22死亡之吻"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>YggdraUnion.exe+351Ea0</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>233</ID>
+          <Description>"23幸運之神"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>YggdraUnion.exe+351Ea2</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>234</ID>
+          <Description>"24海市蜃樓"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>YggdraUnion.exe+351Ea4</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>235</ID>
+          <Description>"25妖精之泣"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>YggdraUnion.exe+351Ea6</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>236</ID>
+          <Description>"26綠樹鞭撻"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>YggdraUnion.exe+351Ea8</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>237</ID>
+          <Description>"27沙暴粉碎"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>YggdraUnion.exe+351Eaa</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>238</ID>
+          <Description>"28泥沼纏繞"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>YggdraUnion.exe+351Eac</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>239</ID>
+          <Description>"29巨石天襲"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>YggdraUnion.exe+351Eae</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>240</ID>
+          <Description>"30王者之護"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>YggdraUnion.exe+351Eb0</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>244</ID>
+          <Description>"34忘卻黎明"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>YggdraUnion.exe+351Eb8</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>245</ID>
+          <Description>"35沉眠之夜"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>YggdraUnion.exe+351Eba</Address>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>197</ID>
+      <Description>"当前装备道具（将数值改为0~267装备对应道具）"</Description>
+      <Options moHideChildren="1" moManualExpandCollapse="1" moDeactivateChildrenAsWell="1"/>
+      <GroupHeader>1</GroupHeader>
+      <Address/>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>521</ID>
+          <Description>"(63禁果)(106山羊奶)(108神圈)(163钻头)(165迷路的龙)(182全属性攻击最大)(213流星弓)(214士气吸取)(258黄金鳗鱼)"</Description>
+          <GroupHeader>1</GroupHeader>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>166</ID>
+          <Description>"米蘭諾裝備"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>YggdraUnion.exe+351ED0</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>198</ID>
+          <Description>"優葛朵菈裝備"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>YggdraUnion.exe+351F08</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>199</ID>
+          <Description>"杜蘭裝備"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>YggdraUnion.exe+351F40</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>200</ID>
+          <Description>"妮婕裝備"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>YggdraUnion.exe+351F78</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>201</ID>
+          <Description>"羅斯威爾裝備"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>YggdraUnion.exe+351FB0</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>202</ID>
+          <Description>"羅莎莉裝備"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>YggdraUnion.exe+351FE8</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>203</ID>
+          <Description>"拉傑爾裝備"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>YggdraUnion.exe+352020</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>204</ID>
+          <Description>"克魯斯裝備"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>YggdraUnion.exe+352058</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>205</ID>
+          <Description>"艾蓮娜裝備"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>YggdraUnion.exe+352090</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>206</ID>
+          <Description>"奇莉葉裝備"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>YggdraUnion.exe+3520C8</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>207</ID>
+          <Description>"戈登裝備"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>YggdraUnion.exe+352100</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>208</ID>
+          <Description>"柯本裝備"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>YggdraUnion.exe+352138</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>209</ID>
+          <Description>"蜜斯托爾裝備"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>YggdraUnion.exe+352170</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>210</ID>
+          <Description>"帕梅菈裝備"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>YggdraUnion.exe+3521A8</Address>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>98</ID>
+      <Description>"敌方技能槽为0"</Description>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+//code from here to '[DISABLE]' will be used to enable the cheat
+aobscanmodule(eRage_aob,YggdraUnion.exe,66 44 03 D0 66 44 89 57 14) // should be unique
+registersymbol(eRage_aob)
+
+eRage_aob:
+  db 66 45 31 d2
+
+[DISABLE]
+//code from here till the end of the code will be used to disable the cheat
+eRage_aob:
+  db 66 44 03 D0
+
+unregistersymbol(eRage_aob)
+
+
+{
+// ORIGINAL CODE - INJECTION POINT: YggdraUnion.exe+28233
+
+YggdraUnion.exe+28210: 66 89 77 14           - mov [rdi+14],si
+YggdraUnion.exe+28214: 40 88 77 11           - mov [rdi+11],sil
+YggdraUnion.exe+28218: 66 09 05 9B B8 38 00  - or [YggdraUnion.exe+3B3ABA],ax
+YggdraUnion.exe+2821F: EB 75                 - jmp YggdraUnion.exe+28296
+YggdraUnion.exe+28221: 84 C0                 - test al,al
+YggdraUnion.exe+28223: 75 5A                 - jne YggdraUnion.exe+2827F
+YggdraUnion.exe+28225: 0F B7 47 14           - movzx eax,word ptr [rdi+14]
+YggdraUnion.exe+28229: 66 3B C3              - cmp ax,bx
+YggdraUnion.exe+2822C: 74 68                 - je YggdraUnion.exe+28296
+YggdraUnion.exe+2822E: 44 0F B6 57 12        - movzx r10d,byte ptr [rdi+12]
+// ---------- INJECTING HERE ----------
+YggdraUnion.exe+28233: 66 44 03 D0           - add r10w,ax
+// ---------- DONE INJECTING  ----------
+YggdraUnion.exe+28237: 66 44 89 57 14        - mov [rdi+14],r10w
+YggdraUnion.exe+2823C: 66 44 3B D3           - cmp r10w,bx
+YggdraUnion.exe+28240: 7C 0D                 - jl YggdraUnion.exe+2824F
+YggdraUnion.exe+28242: 66 89 5F 14           - mov [rdi+14],bx
+YggdraUnion.exe+28246: 40 88 35 2F B7 38 00  - mov [YggdraUnion.exe+3B397C],sil
+YggdraUnion.exe+2824D: EB 47                 - jmp YggdraUnion.exe+28296
+YggdraUnion.exe+2824F: 48 8B 0D 7A B8 38 00  - mov rcx,[YggdraUnion.exe+3B3AD0]
+YggdraUnion.exe+28256: E8 65 33 03 00        - call YggdraUnion.exe+5B5C0
+YggdraUnion.exe+2825B: 84 C0                 - test al,al
+YggdraUnion.exe+2825D: 74 37                 - je YggdraUnion.exe+28296
+}
+</AssemblerScript>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>249</ID>
+      <Description>"名声（0~6）"</Description>
+      <Options moHideChildren="1" moManualExpandCollapse="1" moDeactivateChildrenAsWell="1"/>
+      <GroupHeader>1</GroupHeader>
+      <Address/>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>248</ID>
+          <Description>"米蘭諾名聲"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>YggdraUnion.exe+351ECF</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>294</ID>
+          <Description>"優葛朵菈名聲"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>YggdraUnion.exe+351F07</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>300</ID>
+          <Description>"杜蘭名聲"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>YggdraUnion.exe+351F3F</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>306</ID>
+          <Description>"妮婕名聲"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>YggdraUnion.exe+351F77</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>312</ID>
+          <Description>"羅斯威爾名聲"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>YggdraUnion.exe+351FAF</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>318</ID>
+          <Description>"蘿莎莉名聲"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>YggdraUnion.exe+351FE7</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>324</ID>
+          <Description>"拉傑爾名聲"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>YggdraUnion.exe+35201F</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>330</ID>
+          <Description>"克魯斯名聲"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>YggdraUnion.exe+352057</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>336</ID>
+          <Description>"艾蓮娜名聲"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>YggdraUnion.exe+35208F</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>342</ID>
+          <Description>"奇莉葉名聲"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>YggdraUnion.exe+3520C7</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>348</ID>
+          <Description>"戈登名聲"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>YggdraUnion.exe+3520FF</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>354</ID>
+          <Description>"柯本名聲"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>YggdraUnion.exe+352137</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>360</ID>
+          <Description>"蜜斯托爾名聲"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>YggdraUnion.exe+35216F</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>366</ID>
+          <Description>"帕梅菈名聲"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>YggdraUnion.exe+3521A7</Address>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>425</ID>
+      <Description>"当前使用卡片修改"</Description>
+      <ShowAsSigned>0</ShowAsSigned>
+      <VariableType>Byte</VariableType>
+      <Address>YggdraUnion.exe+354B90</Address>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>500</ID>
+      <Description>"卡片防闪退（修复死亡之吻，天雷，绝对零度，转生预言卡闪退）"</Description>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+globalalloc(textfix,128)
+label(textfix_loop)
+label(textfix_end)
+label(textfix_null)
+
+textfix:
+  test rbx,rbx
+  jz textfix_null
+textfix_loop:
+  db 0F B6 03
+  db 88 84 0B 81 00 00 00
+  db 48 8D 5B 01
+  test al,al
+  jne textfix_loop
+  jmp textfix_end
+textfix_null:
+  db C6 87 81 00 00 00 00
+textfix_end:
+  jmp YggdraUnion.exe+33612
+
+YggdraUnion.exe+33600:
+  jmp textfix
+
+globalalloc(idxfix,128)
+label(idxfix_ok)
+label(idxfix_fallback)
+label(idxfix_continue)
+
+idxfix:
+  db 4C 8D 44 24 50
+  db 0F 47 C8
+  db 0F B6 C1
+  cmp eax,3
+  jbe idxfix_ok
+  xor eax,eax
+idxfix_ok:
+  db 4D 8D 04 C0
+  push rbx
+  mov rbx,YggdraUnion.exe+3E5BF8
+  mov rax,[rbx]
+  pop rbx
+  test rax,rax
+  jz idxfix_fallback
+  db 83 78 20 06
+  jbe idxfix_fallback
+  db 48 8B 40 50
+  db 48 8B 88 E0 01 00 00
+  jmp idxfix_continue
+idxfix_fallback:
+  mov rcx,rbx
+idxfix_continue:
+  jmp YggdraUnion.exe+1DBF8
+
+YggdraUnion.exe+1DBCC:
+  jmp idxfix
+  db 90 90 90 90 90 90 90 90 90 90
+
+globalalloc(cardfix,512)
+label(cardfix_skip)
+
+cardfix:
+  push rax
+  test rcx,rcx
+  jz cardfix_skip
+
+  mov rax,472F656C74746142
+  cmp [rcx],rax
+  jne cardfix_skip
+
+  cmp byte ptr [rcx+11],33
+  jne cardfix_skip
+  cmp byte ptr [rcx+12],31
+  jb cardfix_skip
+  cmp byte ptr [rcx+12],36
+  ja cardfix_skip
+  mov byte ptr [rcx+12],34
+  jmp cardfix_skip
+
+cardfix_skip:
+  pop rax
+  mov [rsp+08],rbx
+  mov [rsp+10],rbp
+  mov [rsp+18],rsi
+  push rdi
+  jmp YggdraUnion.exe+77220
+
+YggdraUnion.exe+77210:
+  jmp cardfix
+
+[DISABLE]
+YggdraUnion.exe+33600:
+  db 0F B6 03 88 84 0B 81 00 00 00 48 8D 5B 01 84 C0 75 EE
+YggdraUnion.exe+1DBCC:
+  db 4C 8D 44 24 50 0F 47 C8 0F B6 C1 4D 8D 04 C0
+YggdraUnion.exe+77210:
+  db 48 89 5C 24 08 48 89 6C 24 10 48 89 74 24 18 57
+</AssemblerScript>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>441</ID>
+      <Description>"角色状态（08 high状态）"</Description>
+      <Options moHideChildren="1" moManualExpandCollapse="1" moDeactivateChildrenAsWell="1"/>
+      <GroupHeader>1</GroupHeader>
+      <Address/>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>442</ID>
+          <Description>"米拉诺状态"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>YggdraUnion.exe+351ECA</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>443</ID>
+          <Description>"尤古朵拉状态"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>YggdraUnion.exe+351F02</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>444</ID>
+          <Description>"杜兰状态"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>YggdraUnion.exe+351F3A</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>445</ID>
+          <Description>"婕妮状态"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>YggdraUnion.exe+351F72</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>446</ID>
+          <Description>"羅斯威爾状态"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>YggdraUnion.exe+351FAA</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>447</ID>
+          <Description>"羅莎莉状态"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>YggdraUnion.exe+351FE2</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>448</ID>
+          <Description>"拉傑爾状态"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>YggdraUnion.exe+35201A</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>449</ID>
+          <Description>"克魯斯状态"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>YggdraUnion.exe+352052</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>450</ID>
+          <Description>"艾蓮娜状态"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>YggdraUnion.exe+35208A</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>451</ID>
+          <Description>"奇莉葉状态"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>YggdraUnion.exe+3520C2</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>452</ID>
+          <Description>"戈登状态"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>YggdraUnion.exe+3520FA</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>453</ID>
+          <Description>"柯本状态"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>YggdraUnion.exe+352132</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>454</ID>
+          <Description>"蜜斯托爾状态"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>YggdraUnion.exe+35216A</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>455</ID>
+          <Description>"帕梅菈状态"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>YggdraUnion.exe+3521A2</Address>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>428</ID>
+      <Description>"职业修改"</Description>
+      <Options moHideChildren="1" moManualExpandCollapse="1" moDeactivateChildrenAsWell="1"/>
+      <GroupHeader>1</GroupHeader>
+      <Address/>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>427</ID>
+          <Description>"尤古朵拉职业"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>YggdraUnion.exe+351EFA</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>429</ID>
+          <Description>"米拉诺"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>YggdraUnion.exe+351EC2</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>424</ID>
+          <Description>"杜兰职业"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>YggdraUnion.exe+351F32</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>430</ID>
+          <Description>"婕妮"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>YggdraUnion.exe+351F6A</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>431</ID>
+          <Description>"羅斯威爾职业"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>YggdraUnion.exe+351FA2</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>432</ID>
+          <Description>"羅莎莉职业"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>YggdraUnion.exe+351FDA</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>433</ID>
+          <Description>"拉傑爾职业"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>YggdraUnion.exe+352012</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>434</ID>
+          <Description>"克魯斯职业"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>YggdraUnion.exe+35204A</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>435</ID>
+          <Description>"艾蓮娜职业"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>YggdraUnion.exe+352082</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>436</ID>
+          <Description>"奇莉葉职业"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>YggdraUnion.exe+3520BA</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>437</ID>
+          <Description>"戈登职业"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>YggdraUnion.exe+3520F2</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>438</ID>
+          <Description>"柯本职业"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>YggdraUnion.exe+35212A</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>439</ID>
+          <Description>"蜜斯托爾职业"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>YggdraUnion.exe+352162</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>440</ID>
+          <Description>"帕梅菈职业"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>Byte</VariableType>
+          <Address>YggdraUnion.exe+35219A</Address>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>456</ID>
+      <Description>"职业详细修改 (32飞行满部队) (8男镰刀 62女镰刀)(27-觉醒炎帝 37-367号)(修改内存，退出游戏则还原)"</Description>
+      <Options moHideChildren="1" moManualExpandCollapse="1" moDeactivateChildrenAsWell="1"/>
+      <GroupHeader>1</GroupHeader>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>520</ID>
+          <Description>"(177-A.S盾)(184- D盾)(1-全属性攻击无效)(95-50%暴击率)(78-全属性攻击最大)(111-必杀槽高速积蓄)"</Description>
+          <GroupHeader>1</GroupHeader>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>457</ID>
+          <Description>"神秘女巫"</Description>
+          <Options moHideChildren="1" moManualExpandCollapse="1" moDeactivateChildrenAsWell="1"/>
+          <GroupHeader>1</GroupHeader>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>458</ID>
+              <Description>"移动部队数"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>YggdraUnion.exe+34C508</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>459</ID>
+              <Description>"武器和连携"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>YggdraUnion.exe+34C509</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>460</ID>
+              <Description>"属性伤害"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>YggdraUnion.exe+34C50A</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>461</ID>
+              <Description>"技能1"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>YggdraUnion.exe+34C50B</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>462</ID>
+              <Description>"技能2"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>YggdraUnion.exe+34C50C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>463</ID>
+              <Description>"技能3"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>YggdraUnion.exe+34C50D</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>464</ID>
+              <Description>"技能4"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>YggdraUnion.exe+34C50E</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>465</ID>
+              <Description>"部队类型"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>YggdraUnion.exe+34C510</Address>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>466</ID>
+          <Description>"少女剑士"</Description>
+          <Options moHideChildren="1" moManualExpandCollapse="1" moDeactivateChildrenAsWell="1"/>
+          <GroupHeader>1</GroupHeader>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>467</ID>
+              <Description>"移动部队数"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>YggdraUnion.exe+34C568</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>468</ID>
+              <Description>"武器和连携"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>YggdraUnion.exe+34C569</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>469</ID>
+              <Description>"属性伤害"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>YggdraUnion.exe+34C56A</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>470</ID>
+              <Description>"技能1"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>YggdraUnion.exe+34C56B</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>471</ID>
+              <Description>"技能2"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>YggdraUnion.exe+34C56C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>472</ID>
+              <Description>"技能3"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>YggdraUnion.exe+34C56D</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>473</ID>
+              <Description>"技能4"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>YggdraUnion.exe+34C56E</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>474</ID>
+              <Description>"部队类型"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>YggdraUnion.exe+34C570</Address>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>475</ID>
+          <Description>"圣女"</Description>
+          <Options moHideChildren="1" moManualExpandCollapse="1" moDeactivateChildrenAsWell="1"/>
+          <GroupHeader>1</GroupHeader>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>476</ID>
+              <Description>"移动部队数"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>YggdraUnion.exe+34C580</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>477</ID>
+              <Description>"武器和连携"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>YggdraUnion.exe+34C581</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>478</ID>
+              <Description>"属性伤害"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>YggdraUnion.exe+34C582</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>479</ID>
+              <Description>"技能1"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>YggdraUnion.exe+34C583</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>480</ID>
+              <Description>"技能2"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>YggdraUnion.exe+34C584</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>481</ID>
+              <Description>"技能3"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>YggdraUnion.exe+34C585</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>482</ID>
+              <Description>"技能4"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>YggdraUnion.exe+34C586</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>483</ID>
+              <Description>"部队类型"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>YggdraUnion.exe+34C588</Address>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>484</ID>
+          <Description>"流浪盗贼"</Description>
+          <Options moHideChildren="1" moManualExpandCollapse="1" moDeactivateChildrenAsWell="1"/>
+          <GroupHeader>1</GroupHeader>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>485</ID>
+              <Description>"移动部队数"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>YggdraUnion.exe+34C598</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>486</ID>
+              <Description>"武器和连携"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>YggdraUnion.exe+34C599</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>487</ID>
+              <Description>"属性伤害"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>YggdraUnion.exe+34C59A</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>488</ID>
+              <Description>"技能1"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>YggdraUnion.exe+34C59B</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>489</ID>
+              <Description>"技能2"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>YggdraUnion.exe+34C59C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>490</ID>
+              <Description>"技能3"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>YggdraUnion.exe+34C59D</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>491</ID>
+              <Description>"技能4"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>YggdraUnion.exe+34C59E</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>492</ID>
+              <Description>"部队类型"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>YggdraUnion.exe+34C5A0</Address>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>493</ID>
+          <Description>"杜兰龙骑士"</Description>
+          <Options moHideChildren="1" moManualExpandCollapse="1" moDeactivateChildrenAsWell="1"/>
+          <GroupHeader>1</GroupHeader>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>494</ID>
+              <Description>"移动部队数"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>YggdraUnion.exe+34C5F8</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>495</ID>
+              <Description>"武器和连携"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>YggdraUnion.exe+34C5F9</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>496</ID>
+              <Description>"属性伤害"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>YggdraUnion.exe+34C5FA</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>497</ID>
+              <Description>"技能1"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>YggdraUnion.exe+34C5FB</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>498</ID>
+              <Description>"技能2"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>YggdraUnion.exe+34C5FC</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>499</ID>
+              <Description>"技能3"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>YggdraUnion.exe+34C5FD</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>522</ID>
+              <Description>"技能4"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>YggdraUnion.exe+34C5FE</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>501</ID>
+              <Description>"部队类型"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>YggdraUnion.exe+34C600</Address>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>502</ID>
+          <Description>"柯本"</Description>
+          <Options moHideChildren="1" moManualExpandCollapse="1" moDeactivateChildrenAsWell="1"/>
+          <GroupHeader>1</GroupHeader>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>503</ID>
+              <Description>"移动部队数"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>YggdraUnion.exe+34C688</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>504</ID>
+              <Description>"武器和连携"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>YggdraUnion.exe+34C689</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>505</ID>
+              <Description>"属性伤害"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>YggdraUnion.exe+34C68A</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>506</ID>
+              <Description>"技能1"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>YggdraUnion.exe+34C68B</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>507</ID>
+              <Description>"技能2"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>YggdraUnion.exe+34C68C</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>508</ID>
+              <Description>"技能3"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>YggdraUnion.exe+34C68D</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>509</ID>
+              <Description>"技能4"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>YggdraUnion.exe+34C68E</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>510</ID>
+              <Description>"部队类型"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>YggdraUnion.exe+34C690</Address>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>511</ID>
+          <Description>"策略家"</Description>
+          <Options moHideChildren="1" moManualExpandCollapse="1" moDeactivateChildrenAsWell="1"/>
+          <GroupHeader>1</GroupHeader>
+          <CheatEntries>
+            <CheatEntry>
+              <ID>512</ID>
+              <Description>"移动部队数"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>YggdraUnion.exe+34C730</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>513</ID>
+              <Description>"武器和连携"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>YggdraUnion.exe+34C731</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>514</ID>
+              <Description>"属性伤害"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>YggdraUnion.exe+34C732</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>515</ID>
+              <Description>"技能1"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>YggdraUnion.exe+34C733</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>516</ID>
+              <Description>"技能2"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>YggdraUnion.exe+34C734</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>517</ID>
+              <Description>"技能3"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>YggdraUnion.exe+34C735</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>518</ID>
+              <Description>"技能4"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>YggdraUnion.exe+34C736</Address>
+            </CheatEntry>
+            <CheatEntry>
+              <ID>519</ID>
+              <Description>"部队类型"</Description>
+              <ShowAsSigned>0</ShowAsSigned>
+              <VariableType>Byte</VariableType>
+              <Address>YggdraUnion.exe+34C738</Address>
+            </CheatEntry>
+          </CheatEntries>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+  </CheatEntries>
+  <CheatCodes>
+    <CodeEntry>
+      <Description>代码:sub rsp,28</Description>
+      <AddressString>YggdraUnion.exe+1A542C</AddressString>
+      <Before>
+        <Byte>00</Byte>
+        <Byte>90</Byte>
+        <Byte>CC</Byte>
+        <Byte>CC</Byte>
+        <Byte>CC</Byte>
+      </Before>
+      <Actual>
+        <Byte>48</Byte>
+        <Byte>83</Byte>
+        <Byte>EC</Byte>
+        <Byte>28</Byte>
+      </Actual>
+      <After>
+        <Byte>E8</Byte>
+        <Byte>E7</Byte>
+        <Byte>05</Byte>
+        <Byte>00</Byte>
+        <Byte>00</Byte>
+      </After>
+    </CodeEntry>
+  </CheatCodes>
+  <UserdefinedSymbols/>
+</CheatTable>
+ 
