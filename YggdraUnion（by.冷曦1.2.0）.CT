@@ -66,6 +66,64 @@ YggdraUnion.exe+8CCE3: 33 C9                    - xor ecx,ecx
 </AssemblerScript>
     </CheatEntry>
     <CheatEntry>
+      <ID>68</ID>
+      <Description>"大天使突击动画修复（缺少BtlResult精灵回退）"</Description>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+//code from here to '[DISABLE]' will be used to enable the cheat
+aobscanmodule(pBtlRe_aob,YggdraUnion.exe,4C 8B 5C C4 40 4D 85 DB 0F 84 ** ** ** **) // should be unique
+alloc(btlre_newmem,$100,pBtlRe_aob)
+
+label(btlre_return)
+
+btlre_newmem:
+  mov r11,[rsp+rax*8+40h]
+  test r11,r11
+  jnz btlre_return
+  mov r11,[rsp+40h]
+  jmp btlre_return
+
+pBtlRe_aob:
+  jmp btlre_newmem
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+btlre_return:
+registersymbol(pBtlRe_aob)
+
+[DISABLE]
+//code from here till the end of the code will be used to disable the cheat
+pBtlRe_aob:
+  db 4C 8B 5C C4 40 4D 85 DB 0F 84 98 00 00 00
+
+unregistersymbol(*)
+dealloc(*)
+
+{
+// ORIGINAL CODE - INJECTION POINT: YggdraUnion.exe+397CC
+// BtlResult sprite lookup returns NULL for characters without
+// battle result animations (e.g. 19ArchAngel), causing the game
+// to freeze mid-battle. This hook provides a fallback: when the
+// lookup table entry is NULL, use array[0] (Re_01Fencer) instead.
+
+YggdraUnion.exe+397C4: 0F B6 C0                 - movzx eax,al
+YggdraUnion.exe+397C7: 0F B6 C0                 - movzx eax,al
+// ---------- INJECTING HERE ----------
+YggdraUnion.exe+397CC: 4C 8B 5C C4 40           - mov r11,[rsp+rax*8+40]
+YggdraUnion.exe+397D1: 4D 85 DB                 - test r11,r11
+YggdraUnion.exe+397D4: 0F 84 98 00 00 00        - je YggdraUnion.exe+39872
+// ---------- DONE INJECTING  ----------
+YggdraUnion.exe+397DA: 0F B7 52 06              - movzx edx,word ptr [rdx+06]
+}
+</AssemblerScript>
+    </CheatEntry>
+    <CheatEntry>
       <ID>2</ID>
       <Description>"当前回合数"</Description>
       <ShowAsSigned>0</ShowAsSigned>
