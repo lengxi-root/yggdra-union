@@ -7,61 +7,68 @@
       <VariableType>Auto Assembler Script</VariableType>
       <AssemblerScript>[ENABLE]
 //code from here to '[DISABLE]' will be used to enable the cheat
-aobscanmodule(pAttack_aob,YggdraUnion.exe,48 ** ** ** ** ** ** 38 1C 01) // should be unique
+aobscanmodule(pAttack_aob,YggdraUnion.exe,3c 04 76 08 3c 07 0f 85 ** ** ** **) // should be unique
 alloc(newmem,$100,pAttack_aob)
 
-label(pAttackcode)
-label(return)
-registersymbol(pAttackcode)
+label(pSkip1)
+label(pSkip2)
 
 newmem:
-  reassemble(pAttack_aob)
-  mov byte ptr [rcx+rax],1
-  jmp return
-
-pAttackcode:
-  reassemble(pAttack_aob)
+  mov rax,[YggdraUnion.exe+3DD280]
+  test rax,rax
+  jz pSkip1
+  mov byte ptr [rax+56h],1
+  mov byte ptr [rax+59h],1
+pSkip1:
+  mov rax,[YggdraUnion.exe+3DD278]
+  test rax,rax
+  jz pSkip2
+  mov byte ptr [rax+56h],0
+  mov byte ptr [rax+59h],0
+pSkip2:
+  jmp YggdraUnion.exe+8D6A8
 
 pAttack_aob:
   jmp newmem
-  nop 2
-return:
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
 registersymbol(pAttack_aob)
 
 [DISABLE]
 //code from here till the end of the code will be used to disable the cheat
 pAttack_aob:
-  reassemble(pAttackcode)
+  db 3c 04 76 08 3c 07 0f 85 91 01 00 00
 
 unregistersymbol(*)
 dealloc(*)
 
 {
-// ORIGINAL CODE - INJECTION POINT: YggdraUnion.exe+8CCB0
+// ORIGINAL CODE - INJECTION POINT: YggdraUnion.exe+8D50B
+// Hook at the charge function's type gate to bypass all character type
+// and spirit restrictions, directly enabling player charge.
+//
+// Original issue: script only hooked the type-0 code path (lea+table check),
+// but non-type-0 characters (including ArchAngel) never reached that code.
+// Fix: hook at the type gate entry, force charge-enable flags on the two
+// global battle objects, then jump to the function epilogue.
 
-YggdraUnion.exe+8CC7B: 3C 07                    - cmp al,07
-YggdraUnion.exe+8CC7D: 0F 84 E6 00 00 00        - je YggdraUnion.exe+8CD69
-YggdraUnion.exe+8CC83: 41 38 9B 16 01 00 00     - cmp [r11+00000116],bl
-YggdraUnion.exe+8CC8A: 0F 85 D9 00 00 00        - jne YggdraUnion.exe+8CD69
-YggdraUnion.exe+8CC90: 48 89 6C 24 48           - mov [rsp+48],rbp
-YggdraUnion.exe+8CC95: 48 89 74 24 50           - mov [rsp+50],rsi
-YggdraUnion.exe+8CC9A: 84 C0                    - test al,al
-YggdraUnion.exe+8CC9C: 0F 85 91 00 00 00        - jne YggdraUnion.exe+8CD33
-YggdraUnion.exe+8CCA2: 0F B6 05 75 42 29 00     - movzx eax,byte ptr [YggdraUnion.exe+320F1E]
-YggdraUnion.exe+8CCA9: 48 69 C8 88 04 00 00     - imul rcx,rax,00000488
+YggdraUnion.exe+8D4E0: 48 83 EC 38              - sub rsp,38
+YggdraUnion.exe+8D4F3: 4C 8B 1D 1E EE 2D 00     - mov r11,[YggdraUnion.exe+3BC318]
+YggdraUnion.exe+8D4FA: 4D 85 DB                  - test r11,r11
+YggdraUnion.exe+8D4FD: 0F 84 A5 01 00 00         - je YggdraUnion.exe+8D6A8
+YggdraUnion.exe+8D503: 41 0F B6 83 17 01 00 00   - movzx eax,byte ptr [r11+00000117]
 // ---------- INJECTING HERE ----------
-YggdraUnion.exe+8CCB0: 48 8D 05 4E 6E 29 00     - lea rax,[YggdraUnion.exe+323B05]
+YggdraUnion.exe+8D50B: 3C 04                     - cmp al,04
+YggdraUnion.exe+8D50D: 76 08                     - jbe YggdraUnion.exe+8D517
+YggdraUnion.exe+8D50F: 3C 07                     - cmp al,07
+YggdraUnion.exe+8D511: 0F 85 91 01 00 00         - jne YggdraUnion.exe+8D6A8
 // ---------- DONE INJECTING  ----------
-YggdraUnion.exe+8CCB7: 38 1C 01                 - cmp [rcx+rax],bl
-YggdraUnion.exe+8CCBA: 7C 77                    - jl YggdraUnion.exe+8CD33
-YggdraUnion.exe+8CCBC: 41 0F B6 73 06           - movzx esi,byte ptr [r11+06]
-YggdraUnion.exe+8CCC1: 48 8D 7C 24 20           - lea rdi,[rsp+20]
-YggdraUnion.exe+8CCC6: 41 0F B6 6B 05           - movzx ebp,byte ptr [r11+05]
-YggdraUnion.exe+8CCCB: C7 44 24 20 FF 00 00 FF  - mov [rsp+20],FF0000FF
-YggdraUnion.exe+8CCD3: C7 44 24 24 00 01 01 00  - mov [rsp+24],00010100
-YggdraUnion.exe+8CCDB: 0F 1F 44 00 00           - nop dword ptr [rax+rax+00]
-YggdraUnion.exe+8CCE0: 0F B6 17                 - movzx edx,byte ptr [rdi]
-YggdraUnion.exe+8CCE3: 33 C9                    - xor ecx,ecx
+YggdraUnion.exe+8D517: 41 0F B6 93 17 01 00 00   - movzx edx,byte ptr [r11+00000117]
 }
 </AssemblerScript>
     </CheatEntry>
