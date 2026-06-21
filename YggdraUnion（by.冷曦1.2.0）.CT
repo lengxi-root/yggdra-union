@@ -65,50 +65,75 @@ YggdraUnion.exe+8CCE3: 33 C9                    - xor ecx,ecx
 }
 </AssemblerScript>
     </CheatEntry>
-                <CheatEntry>
+                        <CheatEntry>
       <ID>520</ID>
       <Description>"19大天使突击精灵修复（借用04水精灵）"</Description>
       <VariableType>Auto Assembler Script</VariableType>
       <AssemblerScript>[ENABLE]
 aobscanmodule(pReSprite_aob,YggdraUnion.exe,4C 8B 5C C4 40 4D 85 DB 0F 84) // should be unique
-alloc(newmem_re,$100,pReSprite_aob)
+aobscanmodule(pReVariant_aob,YggdraUnion.exe,48 8D 4C 24 40 3C FF 74 1A 44) // should be unique
+alloc(newmem_re,$200,pReSprite_aob)
 
 label(code_re)
 label(return_re)
+label(code_var)
+label(return_var)
+label(bIsArch)
 
 newmem_re:
   cmp eax,12
   jne code_re
   mov eax,3
+  mov byte ptr [bIsArch],1
 code_re:
   db 4C 8B 5C C4 40
   jmp return_re
 
+code_var:
+  cmp byte ptr [bIsArch],1
+  jne @f
+  mov byte ptr [bIsArch],0
+  mov al,FF
+@@:
+  db 48 8D 4C 24 40
+  cmp al,FF
+  jmp return_var
+
+bIsArch:
+  db 00
+
 pReSprite_aob:
   jmp newmem_re
 return_re:
+
+pReVariant_aob:
+  jmp code_var
+  db 90 90
+return_var:
 registersymbol(pReSprite_aob)
+registersymbol(pReVariant_aob)
 
 [DISABLE]
 pReSprite_aob:
   db 4C 8B 5C C4 40
 
+pReVariant_aob:
+  db 48 8D 4C 24 40 3C FF
+
 unregistersymbol(pReSprite_aob)
+unregistersymbol(pReVariant_aob)
 dealloc(newmem_re)
 
 {
-// ORIGINAL CODE - INJECTION POINT: YggdraUnion.exe+397CC
+// Fix ArchAngel (19/0x12) missing charge sprite - dual hook
 //
-// 4C 8B 5C C4 40   - mov r11,[rsp+rax*8+40] (Re_ sprite name pointer lookup)
-// 4D 85 DB         - test r11,r11
-// 0F 84 xx xx xx xx - je (skip if NULL)
+// Hook 1 @ +397CC: mov r11,[rsp+rax*8+40]
+//   class 12h -> use class 3 (Re_04Undine) + set flag
 //
-// eax = class byte (0-based = folder_number - 1)
-//   ArchAngel: folder 19 -> byte 12h
-//   Undine:    folder 04 -> byte 03h
-//
-// Hook: if eax==12h, set eax=3 before lookup -> loads Re_04Undine pointer
-// eax is overwritten by "mov eax,100h" a few instructions later, no need to restore
+// Hook 2 @ +3981A: lea rcx,[rsp+40] / cmp al,FF
+//   If flag set: force al=FF -> uses "%s.pta2" format
+//   Result: loads "Re_04Undine.pta2" (base file, confirmed exists)
+//   instead of "Re_04Undine_XXy.pta2" (variant may not exist)
 }
 </AssemblerScript>
     </CheatEntry>
