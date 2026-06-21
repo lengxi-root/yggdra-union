@@ -65,57 +65,54 @@ YggdraUnion.exe+8CCE3: 33 C9                    - xor ecx,ecx
 }
 </AssemblerScript>
     </CheatEntry>
-    <CheatEntry>
+            <CheatEntry>
       <ID>520</ID>
       <Description>"19大天使突击精灵修复（借用04水精灵）"</Description>
       <VariableType>Auto Assembler Script</VariableType>
       <AssemblerScript>[ENABLE]
-//code from here to '[DISABLE]' will be used to enable the cheat
-// Fix: ArchAngel (class 19) has no Re_ charge sprite, redirect to Undine (class 4)
-aobscanmodule(pChargeSprite_aob,YggdraUnion.exe,0F B6 C0 4C 8B 5C C4 40 4D 85 DB 0F 84) // should be unique
-alloc(newmem_charge,$100,pChargeSprite_aob)
+aobscanmodule(pReSprite_aob,YggdraUnion.exe,4C 8B 5C C4 40 4D 85 DB 0F 84) // should be unique
+alloc(newmem_re,$100,pReSprite_aob)
 
-label(pChargeSpriteCode)
-label(chargeReturn)
-registersymbol(pChargeSpriteCode)
+label(code_re)
+label(return_re)
 
-newmem_charge:
-  movzx eax,al
-  cmp eax,13           // 0x13 = 19 decimal = ArchAngel class ID
-  jne pChargeSpriteCode
-  mov eax,4            // redirect to class 4 = Undine
-pChargeSpriteCode:
-  mov r11,[rsp+rax*8+40]
-  jmp chargeReturn
+newmem_re:
+  cmp eax,12
+  jne code_re
+  push eax
+  mov eax,3
+  db 4C 8B 5C C4 40
+  pop eax
+  jmp return_re
+code_re:
+  db 4C 8B 5C C4 40
+  jmp return_re
 
-pChargeSprite_aob:
-  jmp newmem_charge
-  nop 3
-chargeReturn:
-registersymbol(pChargeSprite_aob)
+pReSprite_aob:
+  jmp newmem_re
+return_re:
+registersymbol(pReSprite_aob)
 
 [DISABLE]
-//code from here till the end of the code will be used to disable the cheat
-pChargeSprite_aob:
-  db 0F B6 C0
+pReSprite_aob:
   db 4C 8B 5C C4 40
 
-unregistersymbol(*)
-dealloc(*)
+unregistersymbol(pReSprite_aob)
+dealloc(newmem_re)
 
 {
-// ORIGINAL CODE - INJECTION POINT: YggdraUnion.exe+397CA
-// Fix ArchAngel (19) missing charge/rush sprite by redirecting to Re_04Undine
+// ORIGINAL CODE - INJECTION POINT: YggdraUnion.exe+397CC
 //
-// YggdraUnion.exe+397CA: 0F B6 C0              - movzx eax,al (class ID in al)
-// YggdraUnion.exe+397CD: 4C 8B 5C C4 40        - mov r11,[rsp+rax*8+40] (lookup Re_ sprite pointer)
-// YggdraUnion.exe+397D2: 4D 85 DB              - test r11,r11 (null check)
-// YggdraUnion.exe+397D5: 0F 84 98 00 00 00     - je (skip if no sprite)
+// 4C 8B 5C C4 40   - mov r11,[rsp+rax*8+40] (Re_ sprite pointer table lookup)
+// 4D 85 DB         - test r11,r11
+// 0F 84 xx xx xx xx - je (skip if no Re_ sprite)
 //
-// The Re_ sprite name array is indexed by class ID.
-// Class 19 (ArchAngel) has NULL entry (no Re_ sprite exists).
-// This script replaces class 19 lookup with class 4 (Undine),
-// so ArchAngel uses Re_04Undine charge animation during rush.
+// eax = class byte (0-based, = folder number - 1)
+//   ArchAngel: folder 19 -> class byte 12h (18)
+//   Undine:    folder 04 -> class byte 03h (3)
+//
+// Class 12h has NULL Re_ pointer (no Re_19ArchAngel resource exists).
+// This redirects class 12h lookup to use class 03h (Re_04Undine).
 }
 </AssemblerScript>
     </CheatEntry>
