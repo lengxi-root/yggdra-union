@@ -65,7 +65,7 @@ YggdraUnion.exe+8CCE3: 33 C9                    - xor ecx,ecx
 }
 </AssemblerScript>
     </CheatEntry>
-            <CheatEntry>
+                <CheatEntry>
       <ID>520</ID>
       <Description>"19大天使突击精灵修复（借用04水精灵）"</Description>
       <VariableType>Auto Assembler Script</VariableType>
@@ -79,11 +79,7 @@ label(return_re)
 newmem_re:
   cmp eax,12
   jne code_re
-  push eax
   mov eax,3
-  db 4C 8B 5C C4 40
-  pop eax
-  jmp return_re
 code_re:
   db 4C 8B 5C C4 40
   jmp return_re
@@ -103,16 +99,16 @@ dealloc(newmem_re)
 {
 // ORIGINAL CODE - INJECTION POINT: YggdraUnion.exe+397CC
 //
-// 4C 8B 5C C4 40   - mov r11,[rsp+rax*8+40] (Re_ sprite pointer table lookup)
+// 4C 8B 5C C4 40   - mov r11,[rsp+rax*8+40] (Re_ sprite name pointer lookup)
 // 4D 85 DB         - test r11,r11
-// 0F 84 xx xx xx xx - je (skip if no Re_ sprite)
+// 0F 84 xx xx xx xx - je (skip if NULL)
 //
-// eax = class byte (0-based, = folder number - 1)
-//   ArchAngel: folder 19 -> class byte 12h (18)
-//   Undine:    folder 04 -> class byte 03h (3)
+// eax = class byte (0-based = folder_number - 1)
+//   ArchAngel: folder 19 -> byte 12h
+//   Undine:    folder 04 -> byte 03h
 //
-// Class 12h has NULL Re_ pointer (no Re_19ArchAngel resource exists).
-// This redirects class 12h lookup to use class 03h (Re_04Undine).
+// Hook: if eax==12h, set eax=3 before lookup -> loads Re_04Undine pointer
+// eax is overwritten by "mov eax,100h" a few instructions later, no need to restore
 }
 </AssemblerScript>
     </CheatEntry>
