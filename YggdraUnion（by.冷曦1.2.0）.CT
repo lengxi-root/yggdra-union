@@ -830,7 +830,7 @@ YggdraUnion.exe+2825D: 74 37                 - je YggdraUnion.exe+28296
     </CheatEntry>
     <CheatEntry>
       <ID>500</ID>
-      <Description>"卡片防闪退（修复死亡之吻，天雷，绝对零度，转生预言卡闪退）"</Description>
+      <Description>"卡片防闪退（修复死亡之吻，天雷，绝对零度，转生预言，大天使突击卡闪退）"</Description>
       <VariableType>Auto Assembler Script</VariableType>
       <AssemblerScript>[ENABLE]
 globalalloc(textfix,128)
@@ -902,13 +902,13 @@ cardfix:
   cmp [rcx],rax
   jne cardfix_skip
 
-  cmp byte ptr [rcx+11],33
+  cmp byte ptr [rcx+17],33
   jne cardfix_skip
-  cmp byte ptr [rcx+12],31
+  cmp byte ptr [rcx+18],31
   jb cardfix_skip
-  cmp byte ptr [rcx+12],36
+  cmp byte ptr [rcx+18],36
   ja cardfix_skip
-  mov byte ptr [rcx+12],34
+  mov byte ptr [rcx+18],34
   jmp cardfix_skip
 
 cardfix_skip:
