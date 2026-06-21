@@ -65,7 +65,7 @@ YggdraUnion.exe+8CCE3: 33 C9                    - xor ecx,ecx
 }
 </AssemblerScript>
     </CheatEntry>
-                        <CheatEntry>
+                            <CheatEntry>
       <ID>520</ID>
       <Description>"19大天使突击精灵修复（借用04水精灵）"</Description>
       <VariableType>Auto Assembler Script</VariableType>
@@ -73,34 +73,39 @@ YggdraUnion.exe+8CCE3: 33 C9                    - xor ecx,ecx
 aobscanmodule(pReSprite_aob,YggdraUnion.exe,4C 8B 5C C4 40 4D 85 DB 0F 84) // should be unique
 aobscanmodule(pReVariant_aob,YggdraUnion.exe,48 8D 4C 24 40 3C FF 74 1A 44) // should be unique
 alloc(newmem_re,$200,pReSprite_aob)
+alloc(bIsArch,4)
 
 label(code_re)
 label(return_re)
 label(code_var)
 label(return_var)
-label(bIsArch)
+label(notArch)
+
+registersymbol(bIsArch)
+registersymbol(pReSprite_aob)
+registersymbol(pReVariant_aob)
+
+bIsArch:
+  dd 0
 
 newmem_re:
   cmp eax,12
   jne code_re
   mov eax,3
-  mov byte ptr [bIsArch],1
+  mov dword ptr [bIsArch],1
 code_re:
   db 4C 8B 5C C4 40
   jmp return_re
 
 code_var:
-  cmp byte ptr [bIsArch],1
-  jne @f
-  mov byte ptr [bIsArch],0
+  cmp dword ptr [bIsArch],1
+  jne notArch
+  mov dword ptr [bIsArch],0
   mov al,FF
-@@:
+notArch:
   db 48 8D 4C 24 40
   cmp al,FF
   jmp return_var
-
-bIsArch:
-  db 00
 
 pReSprite_aob:
   jmp newmem_re
@@ -110,8 +115,6 @@ pReVariant_aob:
   jmp code_var
   db 90 90
 return_var:
-registersymbol(pReSprite_aob)
-registersymbol(pReVariant_aob)
 
 [DISABLE]
 pReSprite_aob:
@@ -120,20 +123,17 @@ pReSprite_aob:
 pReVariant_aob:
   db 48 8D 4C 24 40 3C FF
 
+unregistersymbol(bIsArch)
 unregistersymbol(pReSprite_aob)
 unregistersymbol(pReVariant_aob)
 dealloc(newmem_re)
+dealloc(bIsArch)
 
 {
-// Fix ArchAngel (19/0x12) missing charge sprite - dual hook
-//
-// Hook 1 @ +397CC: mov r11,[rsp+rax*8+40]
-//   class 12h -> use class 3 (Re_04Undine) + set flag
-//
-// Hook 2 @ +3981A: lea rcx,[rsp+40] / cmp al,FF
-//   If flag set: force al=FF -> uses "%s.pta2" format
-//   Result: loads "Re_04Undine.pta2" (base file, confirmed exists)
-//   instead of "Re_04Undine_XXy.pta2" (variant may not exist)
+// Fix ArchAngel (class 12h) charge sprite
+// Hook 1 (+397CC): redirect table lookup class 12h->3 (Re_04Undine), set flag
+// Hook 2 (+3981A): if flag set, force al=FF -> base file format "%s.pta2"
+// Result: loads Re_04Undine.pta2 (exists) instead of variant that does not exist
 }
 </AssemblerScript>
     </CheatEntry>
