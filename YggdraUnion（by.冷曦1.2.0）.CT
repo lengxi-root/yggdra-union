@@ -65,6 +65,46 @@ YggdraUnion.exe+8CCE3: 33 C9                    - xor ecx,ecx
 }
 </AssemblerScript>
     </CheatEntry>
+                                    <CheatEntry>
+      <ID>520</ID>
+      <Description>"19大天使突击精灵修复（借用04水精灵）"</Description>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+aobscanmodule(pReCharge_aob,YggdraUnion.exe,0F B6 C0 4C 8B 5C C4 40 4D 85 DB 0F 84)
+alloc(newmem_re,$100,pReCharge_aob)
+
+label(normal)
+label(return_re)
+
+registersymbol(pReCharge_aob)
+
+newmem_re:
+  movzx eax,al
+  cmp eax,12
+  jne normal
+  mov r11,[rsp+58]
+  mov r8,r11
+  lea rcx,[rsp+40]
+  jmp pReCharge_aob+74
+normal:
+  db 4C 8B 5C C4 40
+  test r11,r11
+  jmp return_re
+
+pReCharge_aob:
+  jmp newmem_re
+  db 90 90 90 90 90 90
+return_re:
+
+[DISABLE]
+pReCharge_aob:
+  db 0F B6 C0 4C 8B 5C C4 40 4D 85 DB
+
+unregistersymbol(pReCharge_aob)
+dealloc(newmem_re)
+</AssemblerScript>
+    </CheatEntry>
+
     <CheatEntry>
       <ID>2</ID>
       <Description>"当前回合数"</Description>
